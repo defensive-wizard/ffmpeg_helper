@@ -419,9 +419,16 @@ class FFMpegHelper {
             ],
           );
 
-          if (await permissionProcess.exitCode != ReturnCode.success) {
+          Process testprocess = await Process.start(
+            ffmpeg,
+            ["-h"],
+          );
+
+          if (await permissionProcess.exitCode != ReturnCode.success &&
+              await testprocess.exitCode != ReturnCode.success) {
             throw Exception("Permission denied");
           }
+
           await tempZipFile.delete();
           onProgress?.call(FFMpegProgress(
             downloaded: 0,
