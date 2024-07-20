@@ -376,7 +376,7 @@ class FFMpegHelper {
     if (await tempZipFile.exists() == false) {
       try {
         Dio dio = Dio();
-        print(ffmpegZipPath);
+
         Response response = await dio.download(
           _macosFfmpegUrl,
           ffmpegZipPath,
@@ -470,6 +470,18 @@ class FFMpegHelper {
         ));
         return false;
       }
+    }
+  }
+
+  Future<void> deleteSetup() async {
+    Directory installationDir = Directory(_ffmpegInstallationPath!);
+    final String ffmpegZipPath = path.join(_tempFolderPath!, "ffmpeg.zip");
+    final File tempZipFile = File(ffmpegZipPath);
+    if (await tempZipFile.exists()) {
+      await tempZipFile.delete();
+    }
+    if (await installationDir.exists()) {
+      await installationDir.delete(recursive: true);
     }
   }
 }
